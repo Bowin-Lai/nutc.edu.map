@@ -855,3 +855,37 @@ if ( ! function_exists('function_usable'))
 		return FALSE;
 	}
 }
+if (!function_exists('p'))
+{
+	function p(){
+		if(!headers_sent()){
+			header("Content-Type:text/html; charset=utf-8");
+		}
+		$run_env = php_sapi_name();
+
+		$args = func_get_args();
+		if(count($args) < 1){
+			echo '<font color="red">You must deliver a parameter for the p()</font>';
+			exit();
+		}
+		if($run_env != 'cli') {
+			echo '<div style="width:100%;text-align:left;position:relative;z-index:990"><pre>';
+		}
+		foreach($args as $i => $arg){
+			if(!is_string($arg) && !is_numeric($arg) && !is_bool($arg)){
+				if($run_env == 'cli')
+					print_r($arg) . "\12\n";
+				else
+					print_r($arg);
+			}else{
+				if($run_env == 'cli') {
+					var_dump($arg) . "\12\n";
+				} else {
+					var_dump($arg);
+				}
+			}
+		}
+		if($run_env != 'cli')
+			echo '</pre></div>';
+	}
+}
